@@ -1,4 +1,5 @@
 venv
 .vscode
-logs
+*.log
+logs/*.log
 .env
