@@ -82,6 +82,7 @@ cd ai-content-generator
 # Create virtual environment
 cd scripts
 python setup_env.py
+cd ../
 
 # Activate virtual environment
 # Windows:
