@@ -76,7 +76,7 @@ run.py                         # Application entry point and server startup
 ### 1️⃣ Environment Setup
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/AliiAssi/arabic-ai-question-generator.git
 cd ai-content-generator
 
 # Create virtual environment
