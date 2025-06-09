@@ -168,9 +168,6 @@ Visit `http://localhost:5000/admin/dashboard` to monitor:
 
 ### 🧪 Testing
 ```bash
-# Test PDF functionality
-python scripts/generate_arabic_pdf.py
-
 # Extract project structure
 python scripts/extract_project_structure.py
 
