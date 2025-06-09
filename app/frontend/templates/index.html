@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد الأسئلة الذكي</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>مولد الأسئلة الذكي</h1>
+            <p>أدخل النص وسنقوم بتوليد جميع الأسئلة المنطقية الممكنة</p>
+        </header>
+
+        <main>
+            <!-- Input Mode Selector -->
+            <div class="mode-selector">
+                <button id="textModeBtn" class="mode-btn active">إدخال نص</button>
+                <button id="pdfModeBtn" class="mode-btn">رفع ملف PDF</button>
+            </div>
+
+            <!-- Text Input Mode -->
+            <form id="textForm" class="form-container">
+                <div class="input-group">
+                    <label for="textInput">النص المراد تحليله:</label>
+                    <textarea 
+                        id="textInput" 
+                        name="text" 
+                        placeholder="أدخل النص هنا..."
+                        required
+                        rows="8"
+                    ></textarea>
+                </div>
+                
+                <button type="submit" id="textSubmitBtn" class="submit-btn">
+                    <span class="btn-text">توليد الأسئلة</span>
+                    <span class="loader" style="display: none;">جاري التحليل...</span>
+                </button>
+            </form>
+
+            <!-- PDF Upload Mode -->
+            <form id="pdfForm" class="form-container" style="display: none;" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="pdfInput">اختر ملف PDF:</label>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <input type="file" id="pdfInput" name="pdf_file" accept=".pdf" style="display: none;">
+                        <div class="upload-content">
+                            <div class="upload-icon">📁</div>
+                            <p>اسحب ملف PDF هنا أو انقر للاختيار</p>
+                            <p class="file-info">حد أقصى: 50 ميجابايت</p>
+                        </div>
+                    </div>
+                    <div id="fileInfo" class="file-info-display" style="display: none;"></div>
+                </div>
+                
+                <button type="submit" id="pdfSubmitBtn" class="submit-btn" disabled>
+                    <span class="btn-text">استخراج النص وتوليد الأسئلة</span>
+                    <span class="loader" style="display: none;">جاري المعالجة...</span>
+                </button>
+            </form>
+
+            <div id="results" class="results-container" style="display: none;">
+                <h2>الأسئلة المولدة:</h2>
+                <div id="questionsOutput" class="questions-output"></div>
+                
+                <div class="original-text">
+                    <h3>النص الأصلي:</h3>
+                    <div id="originalTextOutput"></div>
+                </div>
+            </div>
+
+            <div id="error" class="error-container" style="display: none;">
+                <h2>خطأ:</h2>
+                <div id="errorMessage"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

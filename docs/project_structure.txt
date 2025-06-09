@@ -1,0 +1,83 @@
+============================================================
+📂 PROJECT FOLDER STRUCTURE
+============================================================
+
+📁 AI Generator/
+├── 📁 app/
+│   ├── 📁 clients/
+│   │   └── 🐍 ai_client.py (2.4KB)
+│   ├── 📁 config/
+│   │   └── 🐍 settings.py (1.0KB)
+│   ├── 📁 core/
+│   │   ├── 🐍 exceptions.py (405B)
+│   │   └── 🐍 models.py (1.1KB)
+│   ├── 📁 frontend/
+│   │   ├── 📁 static/
+│   │   │   ├── 📁 css/
+│   │   │   │   └── 🎨 main.css (5.2KB)
+│   │   │   └── 📁 js/
+│   │   │       └── 📜 main.js (8.2KB)
+│   │   └── 📁 templates/
+│   │       ├── 🌐 admin_dashboard.html (8.0KB)
+│   │       └── 🌐 index.html (3.6KB)
+│   ├── 📁 prompts/
+│   │   ├── 📁 arabic/
+│   │   │   └── 🐍 questions.py (1.6KB)
+│   │   └── 📁 english/
+│   ├── 📁 services/
+│   │   ├── 🐍 content_service.py (4.8KB)
+│   │   ├── 🐍 pdf_service.py (4.3KB)
+│   │   └── 🐍 user_tracker.py (9.0KB)
+│   ├── 📄 .env.example (134B)
+│   └── 🐍 app.py (6.7KB)
+├── 📁 docs/
+│   ├── 📕 AI Content Generation Project - Folder Structure.pdf (803.9KB)
+│   ├── 📄 project_structure.txt (726B)
+│   └── 📕 السلحفاة الشجاعة والشجرة الحكيمة.pdf (93.2KB)
+├── 📁 logs/
+│   ├── 📄 concurrent_users.log (15.8KB)
+│   └── 📄 user_activity.log (3.0KB)
+├── 📝 README.md (0B)
+├── 📄 requirements.txt (43B)
+└── 🐍 run.py (132B)
+
+============================================================
+📊 PROJECT STATISTICS
+============================================================
+📁 Total Folders: 228
+📄 Total Files: 1824
+🐍 Python Files: 1447
+💾 Total Size: 26.92 MB
+
+📋 File Types:
+   .py: 1447 files
+   (no extension): 185 files
+   .txt: 53 files
+   .typed: 43 files
+   .exe: 24 files
+   .pfb: 18 files
+   .pyi: 12 files
+   .md: 6 files
+   .ttf: 5 files
+   .js: 3 files
+   .png: 3 files
+   .pdf: 2 files
+   .log: 2 files
+   .html: 2 files
+   .css: 2 files
+   .bat: 2 files
+   .pem: 2 files
+   .c: 2 files
+   .rst: 2 files
+   .afm: 2 files
+   .example: 1 files
+   .ps1: 1 files
+   .apache2: 1 files
+   .mit: 1 files
+   .lesser: 1 files
+   .yml: 1 files
+   .sfd: 1 files
+
+============================================================
+Generated from: C:\Users\Admin\Desktop\AI Generator
+============================================================
