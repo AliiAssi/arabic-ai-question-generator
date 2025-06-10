@@ -1,5 +1,11 @@
 // main.js
 document.addEventListener('DOMContentLoaded', function() {
+    // API Configuration - Change this to switch between test and production
+    const API_MODE = 'test'; // Change to 'production' for real Gemini API
+    const API_ENDPOINT = API_MODE === 'test' ? '/generate/test' : '/generate';
+    
+    console.log(`🔧 API Mode: ${API_MODE} | Endpoint: ${API_ENDPOINT}`);
+    
     const textModeBtn = document.getElementById('textModeBtn');
     const pdfModeBtn = document.getElementById('pdfModeBtn');
     const textForm = document.getElementById('textForm');
@@ -112,7 +118,9 @@ document.addEventListener('DOMContentLoaded', function() {
         hideError();
 
         try {
-            const response = await fetch('/generate', {
+            console.log(`📤 Sending text request to: ${API_ENDPOINT}`);
+            
+            const response = await fetch(API_ENDPOINT, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -121,10 +129,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             const data = await response.json();
+            console.log('📥 Response received:', data);
+            
             handleResponse(data, text);
 
         } catch (error) {
-            console.error('Error:', error);
+            console.error('❌ Error:', error);
             showError('حدث خطأ في الاتصال بالخادم');
         } finally {
             setLoadingState('text', false);
@@ -147,19 +157,23 @@ document.addEventListener('DOMContentLoaded', function() {
         hideError();
 
         try {
+            console.log(`📤 Sending PDF request to: ${API_ENDPOINT}`);
+            
             const formData = new FormData();
             formData.append('pdf_file', file);
 
-            const response = await fetch('/generate', {
+            const response = await fetch(API_ENDPOINT, {
                 method: 'POST',
                 body: formData
             });
 
             const data = await response.json();
+            console.log('📥 Response received:', data);
+            
             handleResponse(data, data.original_text || 'النص المستخرج من PDF');
 
         } catch (error) {
-            console.error('Error:', error);
+            console.error('❌ Error:', error);
             showError('حدث خطأ في معالجة ملف PDF');
         } finally {
             setLoadingState('pdf', false);
@@ -167,6 +181,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleResponse(data, originalText) {
+        // Show API mode in response if in test mode
+        if (API_MODE === 'test' && data.metadata && data.metadata.api_mode) {
+            console.log(`🧪 Test API Response: ${data.metadata.response_message}`);
+        }
+        
         if (data.success) {
             showResults(data.questions, originalText, data.metadata);
         } else {
@@ -194,6 +213,17 @@ document.addEventListener('DOMContentLoaded', function() {
         questionsOutput.textContent = questions;
         originalTextOutput.textContent = originalText;
         
+        // Add API mode indicator if in test mode
+        if (API_MODE === 'test' && metadata && metadata.api_mode === 'test') {
+            const testIndicator = document.createElement('div');
+            testIndicator.className = 'test-mode-indicator';
+            testIndicator.innerHTML = `
+                <strong>🧪 وضع الاختبار:</strong> ${metadata.response_message}<br>
+                <small>لتفعيل الذكاء الاصطناعي الحقيقي، غيّر API_MODE إلى 'production'</small>
+            `;
+            questionsOutput.parentNode.insertBefore(testIndicator, questionsOutput);
+        }
+        
         // Add source info if available
         if (metadata && metadata.source_type === 'pdf') {
             const sourceInfo = document.createElement('div');
@@ -218,10 +248,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function hideResults() {
         resultsContainer.style.display = 'none';
-        // Remove any existing source info
+        // Remove any existing source info and test indicators
         const existingSourceInfo = document.querySelector('.source-info');
         if (existingSourceInfo) {
             existingSourceInfo.remove();
+        }
+        const existingTestIndicator = document.querySelector('.test-mode-indicator');
+        if (existingTestIndicator) {
+            existingTestIndicator.remove();
         }
     }
 
@@ -235,4 +269,23 @@ document.addEventListener('DOMContentLoaded', function() {
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
     });
+
+    // Display current API mode on page load
+    const modeIndicator = document.createElement('div');
+    modeIndicator.id = 'api-mode-indicator';
+    modeIndicator.style.cssText = `
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: ${API_MODE === 'test' ? '#ff9800' : '#4caf50'};
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    `;
+    modeIndicator.textContent = API_MODE === 'test' ? '🧪 وضع الاختبار' : '🤖 وضع الإنتاج';
+    document.body.appendChild(modeIndicator);
 });
