@@ -98,7 +98,6 @@ cp app/.env.example app/.env
 
 # Edit app/.env with your settings:
 GENAI_API_KEY=your_google_genai_api_key_here
-SECRET_KEY=your_secret_key_for_sessions
 DEBUG=True
 MAX_WORKERS=4
 ```

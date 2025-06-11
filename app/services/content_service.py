@@ -10,6 +10,7 @@ from app.config.settings import AppConfig
 
 logger = logging.getLogger(__name__)
 
+
 class ContentService:
     """Multi-threaded content generation service"""
     

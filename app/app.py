@@ -54,7 +54,7 @@ def create_app():
     app.register_blueprint(content_api)
     app.register_blueprint(system_api)
     
-    # Cleanup on app shutdown
+    # Cleanup when app is shutdown
     atexit.register(content_service.shutdown)
     
     return app

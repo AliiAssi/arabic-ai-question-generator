@@ -5,11 +5,12 @@ from app.services.user_tracker import user_tracker, track_concurrent_users
 
 content_api = Blueprint('content_api', __name__)
 
-# These will be injected from app.py
+# will be injected from app.py:
 content_service = None
 pdf_service = None
 config = None
 
+# Initialize the content API with required services
 def init_content_api(content_svc, pdf_svc, app_config):
     """Initialize the API with required services"""
     global content_service, pdf_service, config
@@ -51,7 +52,7 @@ def generate():
             text = extraction_result['text']
             source_type = 'pdf'
             source_info = extraction_result['metadata']
-            
+
         else:
             # Handle JSON text input (existing functionality)
             data = request.get_json()
