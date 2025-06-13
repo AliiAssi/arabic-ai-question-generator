@@ -3,7 +3,7 @@ from app.services.user_tracker import user_tracker, track_concurrent_users
 
 system_api = Blueprint('system_api', __name__)
 
-# This will be injected from app.py
+# will be injected from app
 config = None
 
 def init_system_api(app_config):

@@ -5,7 +5,7 @@ from app.services.user_tracker import user_tracker, track_concurrent_users
 
 content_api = Blueprint('content_api', __name__)
 
-# will be injected from app.py:
+# will be injected from app:
 content_service = None
 pdf_service = None
 config = None
@@ -23,7 +23,6 @@ def init_content_api(content_svc, pdf_svc, app_config):
 def generate():
     """Generate questions from submitted text or PDF - supports both sync and async"""
     try:
-        # Check if it's a file upload (multipart) or JSON request
         if request.content_type and 'multipart/form-data' in request.content_type:
             # Handle PDF upload
             if 'pdf_file' not in request.files:

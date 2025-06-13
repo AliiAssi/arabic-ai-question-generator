@@ -1,4 +1,3 @@
-# app/services/pdf_service.py
 import logging
 from typing import Optional, Dict, Any
 from google import genai

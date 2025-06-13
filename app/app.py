@@ -27,7 +27,7 @@ def create_app():
     CORS(app)
     
     # Set secret key for sessions
-    app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-this-in-production')
+    app.secret_key = os.environ.get('SECRET_KEY', 'SECRET')
     
     # Load configuration
     config = load_config()
