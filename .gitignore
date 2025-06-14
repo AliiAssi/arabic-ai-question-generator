@@ -6,3 +6,5 @@ logs/*.log
 
 # Ignore Python bytecode files
 __pycache__/
+
+scripts/test_streaming.py

@@ -1,6 +1,8 @@
 import os
 from dataclasses import dataclass
 from dotenv import load_dotenv
+from google.genai import types
+
 
 env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(env_path)
@@ -12,6 +14,26 @@ class AIConfig:
     response_mime_type: str = "text/plain"
     timeout: int = 30
     max_retries: int = 3
+
+    def __generation_config__(self)-> types.GenerateContentConfig:
+        return types.GenerateContentConfig(
+            # system_instruction="You are a helpful AI assistant.",
+            temperature=0.5, # balanced creativity
+            top_p=0.95, # standard and safe value. It cuts off the least likely, often nonsensical, word choices.
+            top_k=40, # limits the sampling pool to the 40 most likely words. Works well with the temperature.
+            candidate_count=1, # i want only one candidate
+        )
+    
+    def __content_config__(self, prompt: str) -> list[types.Content]:
+        return [
+            types.Content(
+                role="user",
+                parts=[
+                    types.Part.from_text(text=prompt),
+                ],
+            ),
+        ]
+
 
 @dataclass
 class AppConfig:

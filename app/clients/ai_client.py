@@ -55,10 +55,15 @@ class AIClient:
     
     def generate_content(self, prompt: str) -> str:
         """Generate content and return complete response"""
-        content_parts = []
         try:
-            for chunk in self.generate_content_stream(prompt):
-                content_parts.append(chunk)
-            return "".join(content_parts)
+            contents = self.config.__content_config__(prompt)
+            config = self.config.__generation_config__()
+            
+            response = self._client.models.generate_content(
+                model=self.config.model_name,
+                contents=contents,
+                config=config
+            )
+            return response.text
         except Exception as e:
             raise ContentGenerationError(f"Failed to generate complete content: {e}")
