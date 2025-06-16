@@ -1,0 +1,54 @@
+/* responsive.css - Media Queries & Mobile Styles - Refactored */
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        border-radius: 15px;
+    }
+    
+    header {
+        padding: 25px;
+    }
+    
+    header h1 {
+        font-size: 2.2rem;
+    }
+    
+    main {
+        padding: 25px;
+    }
+    
+    textarea {
+        padding: 15px;
+        border-color: #CDE7E8;
+    }
+    
+    .mode-btn {
+        padding: 15px 20px;
+        font-size: 1rem;
+        color: #042328;
+    }
+    
+    .mode-btn.active {
+        color: white;
+    }
+    
+    .file-upload-area {
+        padding: 35px 20px;
+        border-color: #CDE7E8;
+    }
+    
+    /* .file-upload-area:hover {
+        border-color: #EAAA7A;
+    } */
+    
+    .upload-icon {
+        font-size: 3rem;
+        /* color: #EAAA7A; */
+    }
+    
+    .submit-btn:hover {
+        background: linear-gradient(135deg, #2A615E 0%, #30625F 100%);
+    }
+}

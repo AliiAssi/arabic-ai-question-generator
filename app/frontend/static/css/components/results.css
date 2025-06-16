@@ -1,0 +1,80 @@
+/* results.css - Results & Error Display - Refactored */
+
+.results-container, .error-container {
+    margin-top: 35px;
+    padding: 25px;
+    border-radius: 15px;
+    animation: fadeInScale 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    backdrop-filter: blur(10px);
+}
+
+.results-container {
+    background: linear-gradient(145deg, rgba(205, 231, 232, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border: 2px solid #CDE7E8;
+    box-shadow: 0 10px 30px rgba(42, 97, 94, 0.1);
+}
+
+.error-container {
+    background: linear-gradient(145deg, rgba(234, 170, 122, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border: 2px solid #EAAA7A;
+    color: #042328;
+    box-shadow: 0 10px 30px rgba(234, 170, 122, 0.1);
+}
+
+.results-container h2, .error-container h2 {
+    margin-bottom: 18px;
+    color: #042328;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.error-container h2 {
+    color: #042328;
+}
+
+.questions-output {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #CDE7E8;
+    white-space: pre-line;
+    line-height: 1.8;
+    margin-bottom: 25px;
+    font-size: 1.05rem;
+    box-shadow: 0 5px 15px rgba(42, 97, 94, 0.08);
+    color: #042328;
+}
+
+.original-text {
+    margin-top: 25px;
+}
+
+.original-text h3 {
+    margin-bottom: 15px;
+    color: #042328;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+#originalTextOutput {
+    background: linear-gradient(145deg, rgba(205, 231, 232, 0.3) 0%, #ffffff 100%);
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 5px solid #EAAA7A;
+    font-style: italic;
+    line-height: 1.7;
+    font-size: 1.05rem;
+    box-shadow: 0 5px 15px rgba(234, 170, 122, 0.1);
+    color: #042328;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

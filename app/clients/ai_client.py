@@ -64,6 +64,6 @@ class AIClient:
                 contents=contents,
                 config=config
             )
-            return response.text
+            return response.parsed # Since response is a structured object - JSON-like #.parsed may be empty/null.
         except Exception as e:
             raise ContentGenerationError(f"Failed to generate complete content: {e}")

@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 from google.genai import types
 
+from app.config.response_configuration import ResponseConfiguration
+
 
 env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(env_path)
@@ -15,13 +17,27 @@ class AIConfig:
     timeout: int = 30
     max_retries: int = 3
 
-    def __generation_config__(self)-> types.GenerateContentConfig:
+    def __generation_config__(self) -> types.GenerateContentConfig:
+        import json
+        # Load the response schema 
+        config_file = "app/config/response_config.json"
+        with open(config_file, 'r') as f:
+            config = json.load(f)
+            response_schema = config['response_schema']
+        # build the response configuration
+        if not response_schema:
+            raise ValueError("Response schema is required for content generation configuration.")
+        
+        response_configuration = ResponseConfiguration(response_schema=response_schema)
+        
         return types.GenerateContentConfig(
             # system_instruction="You are a helpful AI assistant.",
             temperature=0.5, # balanced creativity
             top_p=0.95, # standard and safe value. It cuts off the least likely, often nonsensical, word choices.
             top_k=40, # limits the sampling pool to the 40 most likely words. Works well with the temperature.
             candidate_count=1, # i want only one candidate
+            response_mime_type=response_configuration.get_response_mime_type(),
+            response_schema=response_configuration.get_response_schema(),
         )
     
     def __content_config__(self, prompt: str) -> list[types.Content]:

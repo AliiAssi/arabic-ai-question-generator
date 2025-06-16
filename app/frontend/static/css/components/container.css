@@ -1,0 +1,32 @@
+/* container.css - Main Container Styles - Refactored */
+
+.container {
+    max-width: 850px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(4, 35, 40, 0.25), 
+                0 0 0 1px rgba(205, 231, 232, 0.1);
+    overflow: hidden;
+    transform: translateY(0);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    animation: containerSlideIn 1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes containerSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(60px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 35px 70px rgba(4, 35, 40, 0.3), 
+                0 0 0 1px rgba(234, 170, 122, 0.2);
+}

@@ -1,0 +1,26 @@
+# Use a recent version of the Docker Compose file format
+version: '3.8'
+
+services:
+  # Define the service for your AI content generator application
+  ai-content-generator:
+    # Tell Compose to build the image from the Dockerfile in the current directory
+    build: .
+    
+    # Give the container a friendly name
+    container_name: ai_content_generator_app
+    
+    # Map the host port 5000 to the container's exposed port 5000
+    ports:
+      - "5000:5000"
+      
+    # Load environment variables from the .env file, as specified in the README.
+    # This is the most secure and flexible way to handle configuration.
+    env_file:
+      - ./app/.env
+      
+    # Mount the local 'logs' directory into the container's '/app/logs' directory.
+    # This ensures that log files are saved on your host machine and persist
+    # even if the container is removed.
+    volumes:
+      - ./logs:/app/logs

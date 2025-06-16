@@ -99,7 +99,7 @@ class ContentService:
     def _build_prompt(self, request: ContentRequest) -> str:
         """Build prompt based on content type and language"""
         if request.content_type == ContentType.QUESTIONS and request.language == Language.ARABIC:
-            return ArabicQuestionPrompts.generate_comprehensive_questions(request)
+            return ArabicQuestionPrompts.generate_mcq_questions(request)
         else:
             raise ContentGenerationError(f"Unsupported content type: {request.content_type.value} in {request.language.value}")
     

@@ -1,0 +1,106 @@
+/* file-upload.css - File Upload Functionality - Refactored */
+
+.file-upload-area {
+    border: 3px dashed #CDE7E8;
+    border-radius: 15px;
+    padding: 50px 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    background: linear-gradient(145deg, rgba(205, 231, 232, 0.1) 0%, #ffffff 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(234, 170, 122, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.file-upload-area:hover {
+    border-color: #EAAA7A;
+    background: linear-gradient(145deg, rgba(205, 231, 232, 0.3) 0%, #ffffff 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(234, 170, 122, 0.2);
+}
+
+.file-upload-area:hover::before {
+    opacity: 1;
+}
+
+.file-upload-area.dragover {
+    /* border-color: #EAAA7A; */
+    background: linear-gradient(145deg, #CDE7E8 0%, #2A615E 100%);
+    transform: scale(1.02);
+    box-shadow: 0 15px 40px rgba(234, 170, 122, 0.3);
+}
+
+.upload-content {
+    pointer-events: none;
+    z-index: 2;
+    position: relative;
+}
+
+.upload-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    opacity: 0.8;
+    color: #EAAA7A;
+    animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.upload-content p {
+    margin: 15px 0;
+    color: #042328;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.file-info {
+    font-size: 1rem;
+    color: #2A615E;
+}
+
+.file-info-display {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(145deg, rgba(205, 231, 232, 0.8) 0%, #ffffff 100%);
+    border: 2px solid #EAAA7A;
+    border-radius: 12px;
+    font-size: 1rem;
+    animation: slideInFromRight 0.5s ease;
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.file-info-display .file-name {
+    font-weight: 700;
+    color: #042328;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.file-info-display .file-details {
+    color: #2A615E;
+}

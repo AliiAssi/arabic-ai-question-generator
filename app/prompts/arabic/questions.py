@@ -1,35 +1,36 @@
 from app.core.models import ContentRequest
 
 class ArabicQuestionPrompts:
-    """Arabic question generation prompts"""
-    
     @staticmethod
-    def generate_comprehensive_questions(request: ContentRequest) -> str:
-        """Generate comprehensive questions prompt with direct output forcing"""
-        prompt = f"""أنت مولد أسئلة عربي متخصص. مهمتك هي قراءة النص التالي وإنتاج قائمة أسئلة مباشرة فقط، بدون أي تعليقات أو مقدمات أو خاتمة.
+    def generate_mcq_questions(request: ContentRequest) -> str:
+        """Generate a prompt for creating multiple-choice questions in Arabic."""
+        prompt = f"""أنت مولد أسئلة اختيار من متعدد عربي متخصص. اقرأ النص التالي وأنشئ أسئلة اختيار من متعدد.
 
 النص:
 "{request.source_text}"
 
 التعليمات:
-- أنشئ جميع الأسئلة المنطقية الممكنة من النص
-- تجنب التكرار تماماً
-- كل سؤال يجب أن يركز على جانب مختلف
-- اكتب الأسئلة مباشرة بدون ترقيم أو رموز
-- لا تكتب أي مقدمة أو تعليق
-- لا تكتب "إليك الأسئلة" أو "الأسئلة هي"
-- ابدأ مباشرة بالسؤال الأول
+- أنشئ أسئلة اختيار من متعدد شاملة
+- كل سؤال يجب أن يحتوي على 3 خيارات فقط
+- خيار واحد صحيح واثنان خاطئان
+- اجعل الخيارات الخاطئة معقولة لكن خاطئة
+- غطِ جميع المفاهيم والحقائق المهمة
+- تجنب التكرار
 
-اكتب الأسئلة التي تغطي:
-- الحقائق الأساسية والمعلومات المباشرة
-- المفاهيم والأفكار الرئيسية
-- التفاصيل والعناصر المهمة
-- العلاقات والروابط بين الأجزاء
-- الأسباب والنتائج والتأثيرات
+⚠️ مهم جداً: يجب أن تكون الإجابة بتنسيق JSON فقط، بدون أي نص إضافي أو تفسيرات. ابدأ مباشرة بـ {{ وانته بـ }}
 
-ابدأ الآن بكتابة الأسئلة مباشرة:"""
-        
+يجب أن تكون الإجابة بتنسيق JSON فقط، بدون أي نص إضافي:
+
+{{
+  "questions": [
+    {{
+      "question": "نص السؤال هنا؟",
+      "options": ["الخيار الأول", "الخيار الثاني", "الخيار الثالث"],
+      "correct_answer": 0
+    }}
+  ]
+}}"""
         if request.additional_instructions:
             prompt += f"\n\nمتطلبات إضافية: {request.additional_instructions}"
-        
+            
         return prompt

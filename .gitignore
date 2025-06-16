@@ -7,4 +7,5 @@ logs/*.log
 # Ignore Python bytecode files
 __pycache__/
 
+scripts/structured.py
 scripts/test_streaming.py

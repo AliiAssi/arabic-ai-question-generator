@@ -1,0 +1,113 @@
+/* header.css - Header Section & Branding - Refactored */
+
+header {
+    background: linear-gradient(135deg, #042328 0%, #2A615E 50%, #30625F 100%);
+    color: white;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+header::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(205, 231, 232, 0.1) 50%, transparent 70%);
+    animation: shimmer 3s infinite;
+    transform: rotate(45deg);
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: #FFFFFF;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from { text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); }
+    to { text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(205, 231, 232, 0.3); }
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.95;
+    border-bottom: 3px solid rgba(234, 170, 122, 0.8);
+    display: inline-block;
+    padding-bottom: 8px;
+    font-weight: 500;
+    animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 0.95;
+        transform: translateY(0);
+    }
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: 120px;
+    background-repeat: repeat;
+    opacity: 0.08;
+    pointer-events: none;
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+.logo-container {
+    background: rgba(205, 231, 232, 0.95);
+    border: 3px solid rgba(234, 170, 122, 0.8);
+    border-radius: 15px;
+    padding: 15px;
+    display: inline-block;
+    margin-bottom: 20px;
+    animation: logoFloat 3s ease-in-out infinite;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-5px) scale(1.05); }
+}
+
+.mascot {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.mascot:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.mascot .bowtie {
+    fill: #042328;
+    color: #042328;
+    transition: all 0.3s ease;
+}
