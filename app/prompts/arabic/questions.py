@@ -1,5 +1,5 @@
 from app.core.models import ContentRequest
-
+from app.prompts.arabic.utils.advanced_prompt import generate_prompt
 class ArabicQuestionPrompts:
     @staticmethod
     def generate_mcq_questions(request: ContentRequest) -> str:
@@ -34,3 +34,14 @@ class ArabicQuestionPrompts:
             prompt += f"\n\nمتطلبات إضافية: {request.additional_instructions}"
             
         return prompt
+    
+    @staticmethod
+    def generate_questions(request: ContentRequest) -> str:
+        """Generate a prompt for creating questions in Arabic."""
+        source_text = request.source_text.strip()
+        num_mcq_questions = request.advanced_options.get('number_of_qcm_questions', 0)
+        num_comprehension_questions = request.advanced_options.get('number_of_comprehension_questions', 0)
+        
+        return generate_prompt(source_text= source_text, num_comprehension_questions=num_comprehension_questions, num_mcq_questions=num_mcq_questions)
+
+    

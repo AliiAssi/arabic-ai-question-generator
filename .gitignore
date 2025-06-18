@@ -9,3 +9,4 @@ __pycache__/
 
 scripts/structured.py
 scripts/test_streaming.py
+scripts/advanced_request.py

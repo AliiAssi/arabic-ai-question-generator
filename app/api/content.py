@@ -2,6 +2,9 @@ from flask import Blueprint, request, jsonify
 import logging
 from app.core.models import ContentRequest, ContentType, Language
 from app.services.user_tracker import user_tracker, track_concurrent_users
+from app.validators.text_validator import text_validate
+from app.validators.pdf_validator import pdf_validate, pdf_extraction_validate
+from app.helpers.parameter_extraction import extract_parameters, create_content_request
 
 content_api = Blueprint('content_api', __name__)
 
@@ -108,123 +111,77 @@ def generate():
             'success': False,
             'error': f'حدث خطأ في الخادم: {str(e)}'
         }), 500
-    
-@content_api.route('/generate/test', methods=['POST'])
+
+@content_api.route('/advanced-generate', methods=['POST'])
 @track_concurrent_users
-def generate_test():
-    """Test API endpoint that bypasses Gemini - returns mock responses"""
+def advanced_generate():
+    """Generate questions from submitted text or PDF"""
     try:
-        # Check if it's a file upload (multipart) or JSON request
+        source_info = {}
+        
+        # Handle different input types using existing validators
         if request.content_type and 'multipart/form-data' in request.content_type:
-            # Handle PDF upload
-            if 'pdf_file' not in request.files:
-                return jsonify({
-                    'success': False,
-                    'error': 'لم يتم إرفاق ملف PDF'
-                }), 400
+            # PDF upload path
+            existing_pdf, error_message = pdf_validate(request)
+            if not existing_pdf:
+                return jsonify({'success': False, 'error': error_message}), 400
             
-            pdf_file = request.files['pdf_file']
-            if pdf_file.filename == '':
-                return jsonify({
-                    'success': False,
-                    'error': 'لم يتم اختيار ملف'
-                }), 400
+            # Extract text from PDF
+            file_data = existing_pdf.read()
+            extraction_result = pdf_service.extract_text_from_pdf(file_data, existing_pdf.filename)
+
             
-            # Mock PDF processing
-            text = "هذا نص تجريبي مستخرج من ملف PDF للاختبار"
+            pdf_text_validation, message = pdf_extraction_validate(extraction_result)
+            if not pdf_text_validation:
+                return jsonify({'success': False, 'error': message}), 400
+            
+            text = message.strip()
             source_type = 'pdf'
-            source_info = {
-                'filename': pdf_file.filename,
-                'file_size': len(pdf_file.read()),
-                'extracted_length': len(text)
-            }
+            source_info = extraction_result['metadata']
             
         else:
-            # Handle JSON text input
-            data = request.get_json()
-            text = data.get('text', '').strip()
+            # JSON text input path
+            text_validation, text = text_validate(request)
+            if not text_validation:
+                return jsonify({'success': False, 'error': text}), 400
             source_type = 'text'
-            source_info = {}
+        print(f"Source type: {source_type}, Text length: {len(text)}")
+        # Extract parameters using helper
+        success, params = extract_parameters(request, source_type)
+        if not success:
+            return jsonify({'success': False, 'error': params['error']}), 400
+        
+        # Create content request
+        content_request, async_mode = create_content_request(text, params)
+        
+        # Validate content request (using existing validator)
+        try:
+            content_request.validate()
+        except ValueError as e:
+            return jsonify({'success': False, 'error': str(e)}), 400
+    
+        # Process request
+        if async_mode:
+            future = content_service.generate_content_async(content_request)
+            response = future.result(timeout=config.request_timeout)
+        else:
+            response = content_service.generate_content_sync(content_request)
+        
+        # Return response
+        if response.success:
+            response.metadata['source_type'] = source_type
+            response.metadata['source_info'] = source_info
             
-            if not text:
-                return jsonify({
-                    'success': False,
-                    'error': 'لم يتم إدخال أي نص'
-                }), 400
-        
-        # Mock question generation based on text length
-        if len(text) < 1:
             return jsonify({
-                'success': False,
-                'error': 'there is a problem - النص قصير جداً للمعالجة'
-            }), 400
-        
-        # Generate mock questions - strict schema compliance
-        mock_questions = [
-            {
-                "question": "ما هو الموضوع الرئيسي للنص؟",
-                "options": [
-                    "التكنولوجيا الحديثة",
-                    "التعليم الإلكتروني", 
-                    "البرمجة والحاسوب"
-                ],
-                "correct_answer": 1
-            },
-            {
-                "question": "كيف يمكن تطبيق المفاهيم المذكورة عملياً؟",
-                "options": [
-                    "من خلال الدورات التدريبية",
-                    "باستخدام المنصات الرقمية",
-                    "كلا الخيارين صحيح"
-                ],
-                "correct_answer": 2
-            },
-            {
-                "question": "ما هي الفوائد المتوقعة من هذا الموضوع؟",
-                "options": [
-                    "توفير الوقت والجهد",
-                    "زيادة الكفاءة والإنتاجية",
-                    "تحسين جودة التعلم"
-                ],
-                "correct_answer": 0
-            }
-        ]
-        
-        # Create mock prompt for realistic metadata
-        mock_prompt = f"Generate quiz questions for the following text: {text}"
-        
-        # Generate a mock thread_id (similar to your example)
-        import random
-        thread_id = random.randint(1000, 9999)
-        
-        # Build response according to exact schema
-        response = {
-            'success': True,
-            'LLM': {
-                'questions': mock_questions
-            },
-            'original_text': text,
-            'metadata': {
-                'source_type': source_type,
-                'source_info': source_info,
-                'prompt_length': len(mock_prompt),
-                'response_length': len(mock_questions),  # Number of questions generated
-                'thread_id': thread_id
-            },
-            'concurrent_users': user_tracker.get_concurrent_users_count()
-        }
-        
-        # Add test-specific metadata for development mode tracking
-        if source_type == 'text':
-            response['metadata']['api_mode'] = 'test'
-            response['metadata']['response_message'] = 'well received'
-            response['metadata']['text_length'] = len(text)
-        
-        return jsonify(response)
-        
+                'success': True,
+                'LLM': response.content,
+                'original_text': text,
+                'metadata': response.metadata,
+                'concurrent_users': user_tracker.get_concurrent_users_count()
+            })
+        else:
+            return jsonify({'success': False, 'error': response.error_message}), 500
+            
     except Exception as e:
-        logging.error(f"Test API error: {e}")
-        return jsonify({
-            'success': False,
-            'error': f'there is a problem - {str(e)}'
-        }), 500
+        logging.error(f"API error: {e}")
+        return jsonify({'success': False, 'error': f'حدث خطأ في الخادم: {str(e)}'}), 500

@@ -40,6 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
         z-index: 1000;
         box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     `;
-    modeIndicator.textContent = API_MODE === 'test' ? '🧪 وضع الاختبار' : '🤖 وضع الإنتاج';
+    modeIndicator.textContent = API_MODE === 'test' ? '🧪 الاختبار' : '🤖 الإنتاج';
     document.body.appendChild(modeIndicator);
 });

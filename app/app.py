@@ -12,7 +12,7 @@ from app.services.pdf_service import PDFService
 
 # Import blueprints
 from app.routes import main_bp, dashboard_bp
-from app.api import content_api, init_content_api, system_api, init_system_api
+from app.api import content_api, init_content_api, system_api, init_system_api, init_advanced_content_api, advanced_content_api
 
 def create_app():
     """Application factory pattern with proper folder structure"""
@@ -42,17 +42,20 @@ def create_app():
     # Initialize services
     ai_client = AIClient(config.ai_config)
     content_service = ContentService(ai_client, config)
+    # advanced_content_service = ContentService(ai_client, config)
     pdf_service = PDFService(ai_client)
     
     # Initialize API modules with services
     init_content_api(content_service, pdf_service, config)
     init_system_api(config)
+    # init_advanced_content_api(advanced_content_service, pdf_service, config)
     
     # Register blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(content_api)
     app.register_blueprint(system_api)
+    # app.register_blueprint(advanced_content_api)
     
     # Cleanup when app is shutdown
     atexit.register(content_service.shutdown)

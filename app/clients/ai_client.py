@@ -4,7 +4,8 @@ from google import genai
 from google.genai import types
 from app.core.exceptions import APIConnectionError, ContentGenerationError
 from app.config.settings import AIConfig
-
+from app.config.advanced_response_schema import get_response_schema
+from app.core.models import ContentRequest
 logger = logging.getLogger(__name__)
 
 class AIClient:
@@ -53,12 +54,19 @@ class AIClient:
             logger.error(f"Content generation failed: {e}")
             raise ContentGenerationError(f"Failed to generate content: {e}")
     
-    def generate_content(self, prompt: str) -> str:
+    def generate_content(self, prompt: str, advanced_request:ContentRequest = None) -> str:
         """Generate content and return complete response"""
         try:
             contents = self.config.__content_config__(prompt)
-            config = self.config.__generation_config__()
-            
+            if advanced_request is None:
+                config = self.config.__generation_config__()
+            else:
+                num_mcq_questions = advanced_request.advanced_options.get('number_of_qcm_questions', 0)
+                num_comprehension_questions = advanced_request.advanced_options.get('number_of_comprehension_questions', 0) 
+                config = self.config.__generation_config__(get_response_schema(
+                        num_mcq_questions=num_mcq_questions, 
+                        num_comprehension_questions=num_comprehension_questions
+                ))         
             response = self._client.models.generate_content(
                 model=self.config.model_name,
                 contents=contents,

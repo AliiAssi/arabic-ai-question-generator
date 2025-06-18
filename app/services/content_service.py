@@ -62,9 +62,11 @@ class ContentService:
             
             # Generate content using AI client
             logger.info(f"Generating {request.content_type.value} content")
-            
             with self._lock:  # Thread-safe AI client usage
-                content = self.ai_client.generate_content(prompt)
+                if request.advanced_options:
+                    content = self.ai_client.generate_content(prompt=prompt, advanced_request=request)
+                else:
+                    content = self.ai_client.generate_content(prompt)
             
             # Create response
             return ContentResponse(
@@ -98,6 +100,8 @@ class ContentService:
     
     def _build_prompt(self, request: ContentRequest) -> str:
         """Build prompt based on content type and language"""
+        if request.content_type == ContentType.QUESTIONS and request.language == Language.ARABIC and request.advanced_options:
+            return ArabicQuestionPrompts.generate_questions(request)
         if request.content_type == ContentType.QUESTIONS and request.language == Language.ARABIC:
             return ArabicQuestionPrompts.generate_mcq_questions(request)
         else:

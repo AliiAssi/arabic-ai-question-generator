@@ -1,0 +1,8 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/header_bar.css') }}">
+<nav class="header-bar">
+    <div class="nav-container">
+        <a href="/" class="nav-link {{ 'active' if request.endpoint == 'index' }}">الرئيسية</a>
+        <a href="/advanced" class="nav-link {{ 'active' if request.endpoint == 'advanced' }}">متقدم</a>
+        <a href="/admin/dashboard" class="nav-link {{ 'active' if request.endpoint == 'history' }}">admin</a>
+    </div>
+</nav>

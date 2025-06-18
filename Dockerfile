@@ -1,8 +1,7 @@
-# Step 1: Use an official Python runtime as a parent image
-# The README specifies Python 3.8+, so we'll use a recent, slim version.
-FROM python:3.9-slim-buster
+# Start from a Python base image (e.g., python:3.9) that has Python runtime
+FROM python:3.9-slim-buster 
 
-# Step 2: Set the working directory inside the container
+# Step 2: Define a directory inside the image
 WORKDIR /app
 
 # Step 3: Copy the dependencies file first to leverage Docker's build cache.

@@ -17,7 +17,7 @@ class AIConfig:
     timeout: int = 30
     max_retries: int = 3
 
-    def __generation_config__(self) -> types.GenerateContentConfig:
+    def __generation_config__(self, advanced_response_schema=None) -> types.GenerateContentConfig:
         import json
         # Load the response schema 
         config_file = "app/config/response_config.json"
@@ -30,15 +30,26 @@ class AIConfig:
         
         response_configuration = ResponseConfiguration(response_schema=response_schema)
         
-        return types.GenerateContentConfig(
-            # system_instruction="You are a helpful AI assistant.",
-            temperature=0.5, # balanced creativity
-            top_p=0.95, # standard and safe value. It cuts off the least likely, often nonsensical, word choices.
-            top_k=40, # limits the sampling pool to the 40 most likely words. Works well with the temperature.
-            candidate_count=1, # i want only one candidate
-            response_mime_type=response_configuration.get_response_mime_type(),
-            response_schema=response_configuration.get_response_schema(),
-        )
+        if advanced_response_schema is None:
+            return types.GenerateContentConfig(
+                # system_instruction="You are a helpful AI assistant.",
+                temperature=0.5, # balanced creativity
+                top_p=0.95, # standard and safe value. It cuts off the least likely, often nonsensical, word choices.
+                top_k=40, # limits the sampling pool to the 40 most likely words. Works well with the temperature.
+                candidate_count=1, # i want only one candidate
+                response_mime_type=response_configuration.get_response_mime_type(),
+                response_schema=response_configuration.get_response_schema(),
+            )
+        else:
+            return types.GenerateContentConfig(
+                # system_instruction="You are a helpful AI assistant.",
+                temperature=0.5, # balanced creativity
+                top_p=0.95, # standard and safe value. It cuts off the least likely, often nonsensical, word choices.
+                top_k=40, # limits the sampling pool to the 40 most likely words. Works well with the temperature.
+                candidate_count=1, # i want only one candidate
+                response_mime_type=response_configuration.get_response_mime_type(),
+                response_schema=advanced_response_schema,
+            )
     
     def __content_config__(self, prompt: str) -> list[types.Content]:
         return [
